@@ -1,13 +1,14 @@
 package com.example.jpa;
 
+import com.example.jpa.user.db.UserEntity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 @SpringBootApplication
 public class JpaApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JpaApplication.class, args);
+	public interface UserRepository extends JpaRepository<UserEntity, Long> {
 	}
 
 }
