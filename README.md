@@ -163,4 +163,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 ## Ch 08. 간단한 게시판 프로젝트
 
+### ERD
+![simple-board](https://github.com/user-attachments/assets/f71695cb-3f68-45e0-a976-3ecccf3a3f15)
 
