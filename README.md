@@ -151,3 +151,31 @@ abstract public class SimpleDataRepository<T extends Entity, ID extends Long> im
 }
 ```
 
+## Ch 06. Spring Data JPA
+기존 JDBC는 날것의 코드를 사용하기 때문에 번거로움
+Spring Data JPA는 복잡한 데이터나 트랜잭션 관리는 알아서 해주고 사용자는 메소드 기반으로 db에 접근할 수 있다.
+
+```
+// JpaRepository를 상속받음으로서 기본적인 CRUD 기능을 사용할 수 있다.
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+}
+```
+
+## Ch 08. 간단한 게시판 프로젝트
+
+### ERD
+![simple-board](https://github.com/user-attachments/assets/f71695cb-3f68-45e0-a976-3ecccf3a3f15)
+
+
+### 기능
+- 게시판
+    - 게시판을 만들 수 있다.
+    - 게시판 아이디로 각 게시판을 조회할 수 있다.
+- 게시글
+    - 게시판에 게시글을 작성할 수 있다.
+    - 게시글을 조회하기 위해서는 게시글 아이디와 비밀번호가 필요하다.
+    - 게시글을 삭제하기 위해서는 게시글 아이디와 비밀번호가 필요하다.
+    - 페이징 처리된 게시글 목록을 조회할 수 있다.
+- 댓글
+    - 게시글에 댓글을 작성할 수 있다.
+
