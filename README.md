@@ -37,4 +37,117 @@ public class GlobalExceptionHandler {
 ```
 
 @ExceptionHandler 어노테이션은 컨트롤러의 메소드에 적용할 수 있으며, 이 경우 해당 컨트롤러에서 발생하는 예외만을 처리함
+### Spring Boot Validation
+컨트롤러에서 입력받은 데이터를 어노테이션 기반으로 검증 할 수 있음
+-> 핵심로직과 검증로직을 분리하여 생산성이 높아짐
+
+```
+@PostMapping("")
+    public Api<UserRegisterRequest> register(
+        @Valid // 검증하고자 하는 입력값에 @Valid 어노테이션을 붙여 검증
+        @RequestBody
+        Api<UserRegisterRequest> userRegisterRequest
+    ){
+        var body = userRegisterRequest.getData();
+        return Api.<UserRegisterRequest>builder()
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMessage(HttpStatus.OK.getReasonPhrase())
+                .data(body)
+                .build();
+    }
+```
+```
+@NoArgsConstructor
+@Builder
+@JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class UserRegisterRequest {
+
+    private String name;
+
+    private String nickname;
+
+    @Size(min = 1, max = 12)
+    @NotBlank
+    private String password;
+
+    @NotNull
+    @Min(1)
+    @Max(100)
+    private Integer age;
+
+    @Email
+    private String email;
+
+    ...
+
+}
+```
+## Ch 04. Memory DataBase
+실제 데이터 베이스와 연결하기 전에 메모리에 데이터를 저장하며 Repository에 대해 학습
+```
+abstract public class SimpleDataRepository<T extends Entity, ID extends Long> implements DataRepository<T, ID> {
+
+    private List<T> dataList = new ArrayList<T>(); // 데이터를 리스트에 저장
+
+    private static long index = 0; // id
+
+    private Comparator<T> sort = new Comparator<T>() {
+        @Override
+        public int compare(T o1, T o2) {
+            return Long.compare(o1.getId(), o2.getId());
+        }
+    };
+
+    @Override
+    public T save(T data) {
+        if(Objects.isNull(data)){
+            throw new RuntimeException("데이터가 존재하지 않습니다.");
+        }
+
+        var prevData = dataList.stream()
+                .filter(it -> {
+                    return it.getId().equals(data.getId());
+                })
+                .findFirst();
+        if(prevData.isPresent()){
+            dataList.remove(prevData.get());
+            dataList.add(data);
+        }else{
+            index++;
+            data.setId(index);
+            dataList.add(data);
+        }
+        return data;
+    }
+
+    @Override
+    public Optional<T> findById(ID id){
+        return dataList.stream()
+                .filter(it -> {
+                    return ( it.getId().equals(id) );
+                })
+                .findFirst();
+    }
+
+    @Override
+    public List<T> findAll() {
+        return dataList
+                .stream()
+                .sorted(sort)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(ID id) {
+        var deleteEntity = dataList.stream()
+                .filter(it -> {
+                    return ( it.getId().equals(id) );
+                })
+                .findFirst();
+        if(deleteEntity.isPresent()){
+            dataList.remove(deleteEntity.get());
+        }
+    }
+}
+```
 
