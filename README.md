@@ -166,3 +166,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 ### ERD
 ![simple-board](https://github.com/user-attachments/assets/f71695cb-3f68-45e0-a976-3ecccf3a3f15)
 
+
+### 기능
+- 게시판
+    - 게시판을 만들 수 있다.
+    - 게시판 아이디로 각 게시판을 조회할 수 있다.
+- 게시글
+    - 게시판에 게시글을 작성할 수 있다.
+    - 게시글을 조회하기 위해서는 게시글 아이디와 비밀번호가 필요하다.
+    - 게시글을 삭제하기 위해서는 게시글 아이디와 비밀번호가 필요하다.
+    - 페이징 처리된 게시글 목록을 조회할 수 있다.
+- 댓글
+    - 게시글에 댓글을 작성할 수 있다.
+
